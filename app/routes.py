@@ -28,7 +28,7 @@ class Solicitacao(db.Model):
     email = db.Column(db.String(100))
     telefone = db.Column(db.String(20))
     endereco = db.Column(db.String(100))
-    dl_classification = db.Column(db.String(8))
+    dl_classification = db.Column(db.String(10))
     especialista_classification = db.Column(db.Boolean)
     nome_especialista = db.Column(db.String(50))
     img_dir = db.Column(db.String(100))
@@ -92,35 +92,35 @@ def autenticar():
         # Mostrar o formulario onde o especialista poderá preencher sua classificação 
         # e ver o mapa com os marcadores de envios de fotos indicando se já foram 
         # classificadas por um especialista
-        # db_cursor = conexao.cursor()
+        if request.method == 'POST':
+            id_solicitacao = request.form.get('id')
+            real_classification = request.form.get('reposta_especialista')
+            nome_especialista = request.form.get('nome_especialista')
 
-        # id_solicitacao = request.form.get('id')
-        # real_classification = request.form.get('reposta_especialista')
-        # nome_especialista = request.form.get('nome_especialista')
+            db_cursor = conexao.cursor()
 
-        # if real_classification == 'Sim':
-        #     db_cursor.execute( 
-        #         '''UPDATE solicitacoes SET nome_especialista=%s,\ 
-        #         dl_classification=%s WHERE id=%s''', (nome_especialista, True, id_solicitacao))
-        # elif real_classification == 'Não':
-        #     db_cursor.execute( 
-        #         '''UPDATE solicitacoes SET nome_especialista=%s,\ 
-        #         dl_classification=%s WHERE id=%s''', (nome_especialista, False, id_solicitacao))
-        
+            if real_classification == 'Sim':
+                db_cursor.execute( 
+                    '''UPDATE solicitacoes SET nome_especialista=%s,\ 
+                    dl_classification=%s WHERE id=%s''', (nome_especialista, True, id_solicitacao))
+            elif real_classification == 'Não':
+                db_cursor.execute( 
+                    '''UPDATE solicitacoes SET nome_especialista=%s,\ 
+                    dl_classification=%s WHERE id=%s''', (nome_especialista, False, id_solicitacao))
+            
 
-        nome = list(('joao', 'ana'))
-        email = list(('asdsad@fasd.com', 'asdasf@grsf.com'))
-        telefone = list(('2132312321', '4123231123'))
-        endereco = list(('rua lauro muller, 36', 'rua dias cabral, 82'))
-        nivel_certeza = list(('ALTA', 'BAIXA'))
-        real_classification = list((True, ''))
-        nome_especialista = list(('pedro', ''))
-        img_dir = list(('D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta.jpg', 
-                        'D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta2.jpg'))
-        
-        #mapa(nome,email,telefone,endereco,nivel_certeza,real_classification,nome_especialista,img_dir)
-        
-        return render_template('especialista.html')
+            nome = list(('joao', 'ana'))
+            email = list(('asdsad@fasd.com', 'asdasf@grsf.com'))
+            telefone = list(('2132312321', '4123231123'))
+            endereco = list(('rua lauro muller, 36', 'rua dias cabral, 82'))
+            nivel_certeza = list(('ALTA', 'BAIXA'))
+            real_classification = list((True, ''))
+            nome_especialista = list(('pedro', ''))
+            img_dir = list(('D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta.jpg', 
+                            'D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta2.jpg'))
+                    
+            return render_template('especialista.html')
+        return None
     else:
         flash("Dados inválidos")
         flash("Login ou senha inválidos")
