@@ -1,0 +1,41 @@
+{% extends "base.html" %} 
+
+    {% block conteudo %}
+
+<h2>Envie uma foto do inseto!</h2>
+
+<div>
+    <form id="upload-file" action="/resultado_da_consulta" method="post">
+        <label for="nome">Seu nome (obrigatório)</label><br>
+        <input type="text" name="nome"><br><br>
+        <label for="email">Seu e-mail (obrigatório)</label><br>
+        <input type="email" name="email"><br><br>
+        <label for="endereco">Seu endereço (obrigatório)</label><br>
+        <input type="text" name="endereco"><br><br>
+        <label for="telefone">Seu telefone</label><br>
+        <input type="tel" name="telefone"><br><br>
+        <label for="imageUpload" class="upload-label">
+            Escolher ficheiro
+        </label>
+        <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
+    </form>
+
+    <div class="image-section" style="display:none;">
+        <div class="img-preview">
+            <div id="imagePreview">
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary btn-lg " id="btn-predict">Enviar</button>
+        </div>
+    </div>
+
+    <div class="loader" style="display:none;"></div>
+
+    <h3 id="result">
+        <span> </span>
+    </h3>
+
+</div>
+
+{% endblock %}

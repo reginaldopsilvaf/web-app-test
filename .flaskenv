@@ -1,1 +1,1 @@
-FLASK_APP=fiocruz.py
+FLASK_APP=fiocruz:app
