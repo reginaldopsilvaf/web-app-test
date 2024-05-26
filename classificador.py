@@ -1,15 +1,13 @@
 import tensorflow as tf
 import numpy as np
 from keras.applications.imagenet_utils import preprocess_input
-from keras.models import load_model
-import os
 
 def prediction_func(img_path):
 
     # Model saved with Keras model.save()
-    MODEL_PATH = os.path.join("modelo_classificador", "model_resnet18.keras")
+    MODEL_PATH = 'D:/fiocruz/aplicacao_web/app/modelo_classificador/model_resnet18.keras'
     # Load your trained model
-    model = load_model(MODEL_PATH)
+    model = tf.keras.models.load_model(MODEL_PATH)
 
     img = tf.keras.utils.load_img(img_path, target_size=(224, 224))
     #img_4d=img.reshape(-1,224,224,3)

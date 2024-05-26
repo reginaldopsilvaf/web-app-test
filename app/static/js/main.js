@@ -51,4 +51,32 @@ $(document).ready(function () {
         });
     });
 
+
+    // Specialist Answer
+    $('#btn-answer').click(function () {
+        var form_data2 = new FormData($('#compute-answer')[0]);
+
+        // Show loading animation
+        $(this).hide();
+        $('.loader').show();
+
+        // Compute answer from specialist by calling api /autenticar
+        $.ajax({
+            type: 'POST',
+            url: '/autenticar',
+            data: form_data2,
+            contentType: false,
+            cache: false,
+            processData: false,
+            async: true,
+            success: function (data) {
+                // Get and display the result
+                $('.loader').hide();
+                $('#result').fadeIn(600);
+                $('#result').text(' Result:  ' + data);
+                console.log('Success!');
+            },
+        });
+    });
+
 });

@@ -27,8 +27,8 @@
             <style>
                 #map_cf3725da6ccbd22473d7c123ad3f2a61 {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 70.0%;
+                    height: 70.0%;
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -36,7 +36,22 @@
             </style>
         
 </head>
-<body>
+<body>      
+
+            <div>
+                <form id="compute-answer" action="/resultado_da_consulta" method="post">
+                    <label for="id">ID da solicitação (obrigatório)</label><br>
+                    <input type="text" name="id"><br><br>
+                    <label for="reposta_especialista">Classificação do especialista ('Sim' ou 'Não')</label><br>
+                    <input type="text" name="reposta_especialista"><br><br>
+                    <label for="nome_especialista">Nome do especialista (obrigatório)</label><br>
+                    <input type="text" name="nome_especialista"><br><br>
+                </form>
+                <div>
+                    <button type="submit" class="btn btn-primary btn-lg " id="btn-answer">Enviar</button>
+                </div>
+                <div class="loader" style="display:none;"></div>
+            </div>
     
     
             <div class="folium-map" id="map_cf3725da6ccbd22473d7c123ad3f2a61" ></div>
