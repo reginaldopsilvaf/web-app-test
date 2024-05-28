@@ -27,7 +27,7 @@ def prediction_func(img_path):
     elif (output[1] >= 85.0 and output[1] < 95.0):
         nivel_certeza = 'ALTA'
     elif output[1] >= 95.0:
-        nivel_certeza = 'ALTÍSSIMA'
+        nivel_certeza = 'ALTISSIMA'
 
     nivel_certeza += f'\nSua foto demonstra uma {nivel_certeza} chance de ser um barbeiro.\n'
     nivel_certeza += 'A identificação será confirmada por um especialista e em breve voce receberá uma mensagem de confirmação.\n\n'

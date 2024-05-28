@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, url_for
 import os
 from werkzeug.utils import secure_filename
 from mapa import mapa
@@ -7,6 +7,8 @@ from classificador import prediction_func
 import psycopg2
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+import json
+
 db = SQLAlchemy()
 conexao = psycopg2.connect(database='fiocruz_barbeiro',
                            user='postgres',
@@ -44,8 +46,10 @@ class Solicitacao(db.Model):
         self.especialista_classification = especialista_classification
         self.nome_especialista = nome_especialista
 
-    def __repr__(self):
-        return "Solicitação: {}".format(self.id)
+    def to_json(self):
+        return {"id": self.id, "nome": self.nome, "email": self.email, "telefone": self.telefone, "endereco": self.endereco, 
+                "dl_classification": self.dl_classification, "img_dir": self.img_dir, 
+                "especialista_classification": self.especialista_classification, "nome_especialista": self.nome_especialista}
 
 @app.route('/')
 @app.route('/home')
@@ -80,53 +84,56 @@ def resultado_da_consulta():
 
     return preds
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+# @app.route('/login', methods=['POST', 'GET'])
+# def login():
+#     if request.method == "POST":
+#         usuario = request.form["usuario"]
+#         senha = request.form["senha"]
+#         if usuario == 'admin' and senha == 'senha123':
+#             return redirect(url_for("especialista"))
+#         return redirect(url_for("login"))
+#     else:
+#         return render_template("login.html")
 
-@app.route('/autenticar', methods=['GET','POST'])
-def autenticar():
-    usuario = request.form.get('usuario')
-    senha = request.form.get('senha')
-    if usuario == 'admin' and senha == 'senha123':
-        # Mostrar o formulario onde o especialista poderá preencher sua classificação 
-        # e ver o mapa com os marcadores de envios de fotos indicando se já foram 
-        # classificadas por um especialista
-        if request.method == 'POST':
-            id_solicitacao = request.form.get('id')
-            real_classification = request.form.get('reposta_especialista')
-            nome_especialista = request.form.get('nome_especialista')
+@app.route('/especialista')
+def especialista():
+    return render_template('especialista.html')
 
-            db_cursor = conexao.cursor()
+@app.route('/atualiza_banco', methods=['POST'])
+def atualiza_banco():
+    id_solicitacao = request.form.get('id')
+    real_classification = request.form.get('reposta_especialista')
+    nome_especialista = request.form.get('nome_especialista')
 
-            if real_classification == 'Sim':
-                db_cursor.execute( 
-                    '''UPDATE solicitacoes SET nome_especialista=%s,\ 
-                    dl_classification=%s WHERE id=%s''', (nome_especialista, True, id_solicitacao))
-            elif real_classification == 'Não':
-                db_cursor.execute( 
-                    '''UPDATE solicitacoes SET nome_especialista=%s,\ 
-                    dl_classification=%s WHERE id=%s''', (nome_especialista, False, id_solicitacao))
-            
+    db.session.execute(text("update solicitacoes set nome_especialista=:resposta where id=:id"), {"resposta":nome_especialista, "id": id_solicitacao})
 
-            nome = list(('joao', 'ana'))
-            email = list(('asdsad@fasd.com', 'asdasf@grsf.com'))
-            telefone = list(('2132312321', '4123231123'))
-            endereco = list(('rua lauro muller, 36', 'rua dias cabral, 82'))
-            nivel_certeza = list(('ALTA', 'BAIXA'))
-            real_classification = list((True, ''))
-            nome_especialista = list(('pedro', ''))
-            img_dir = list(('D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta.jpg', 
-                            'D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta2.jpg'))
-                    
-            return render_template('especialista.html')
-        return None
-    else:
-        flash("Dados inválidos")
-        flash("Login ou senha inválidos")
-        return redirect('/login')
-    
-    # u = Usuario(nome, email, senha)
-    # db.session.add(u)
-    # db.session.commit()
-    # return 'Dados cadastrados com sucesso'
+    if real_classification == 'Sim':
+        db.session.execute(text("update solicitacoes set especialista_classification=:resposta where id=:id"), {"resposta":True, "id": id_solicitacao})
+    elif real_classification == 'Não':
+        db.session.execute(text("update solicitacoes set especialista_classification=:resposta where id=:id"), {"resposta":False, "id": id_solicitacao})
+
+    db.session.commit()
+
+    return 'Banco atualizado!' 
+
+        # db_cursor = conexao.cursor()
+
+        # if real_classification == 'Sim':
+        #     db_cursor.execute( 
+        #         '''UPDATE solicitacoes SET nome_especialista=%s,\ 
+        #         dl_classification=%s WHERE id=%s''', (nome_especialista, True, id_solicitacao))
+        # elif real_classification == 'Não':
+        #     db_cursor.execute( 
+        #         '''UPDATE solicitacoes SET nome_especialista=%s,\ 
+        #         dl_classification=%s WHERE id=%s''', (nome_especialista, False, id_solicitacao))
+        
+
+        # nome = list(('joao', 'ana'))
+        # email = list(('asdsad@fasd.com', 'asdasf@grsf.com'))
+        # telefone = list(('2132312321', '4123231123'))
+        # endereco = list(('rua lauro muller, 36', 'rua dias cabral, 82'))
+        # nivel_certeza = list(('ALTA', 'BAIXA'))
+        # real_classification = list((True, ''))
+        # nome_especialista = list(('pedro', ''))
+        # img_dir = list(('D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta.jpg', 
+        #                 'D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta2.jpg'))
