@@ -1,6 +1,8 @@
 import folium
 from geopy.geocoders import Nominatim
 import base64
+import os
+from werkzeug.utils import secure_filename
 
 def mapa(nome,email,telefone,endereco,nivel_certeza,
         real_classification,nome_especialista,img_dir):
@@ -45,4 +47,8 @@ def mapa(nome,email,telefone,endereco,nivel_certeza,
 
         map.add_child(marker)
 
-    map.save('D:/fiocruz/aplicacao_web/app/templates/especialista.html')
+    basepath = os.path.dirname(__file__)
+    html_dir = os.path.join(
+        basepath, 'app\\templates', secure_filename('especialista.html'))
+    map.save(html_dir)
+    #map.save('D:/fiocruz/aplicacao_web/app/templates/especialista.html')

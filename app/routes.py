@@ -1,5 +1,5 @@
 from app import app
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, jsonify
 import os
 from werkzeug.utils import secure_filename
 from mapa import mapa
@@ -7,20 +7,31 @@ from classificador import prediction_func
 import psycopg2
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow 
 import json
 
-db = SQLAlchemy()
-conexao = psycopg2.connect(database='fiocruz_barbeiro',
-                           user='postgres',
-                           password='postgres',
-                           host='localhost', port='5432')
+# Import biblioteca for automatic e-mail
+import smtplib
+servidor_email = smtplib.SMTP('smtp.gmail.com', 587)
+servidor_email.starttls()
+servidor_email.ehlo()
+servidor_email.login('reginaldo.filho@ime.eb.br', 'zztt cvks hkhu zsow')
+login = 'reginaldo.filho@ime.eb.br'
+password = 'zztt cvks hkhu zsow'
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
 
 app.config['SECRET_KEY'] = "palavra-secreta"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost/fiocruz_barbeiro'
 app.config['SQLALCHEMY_TRACKMODIFICATIONS'] = False
-db.init_app(app)
 
-migrate = Migrate(app, db)
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+conexao = psycopg2.connect(database='fiocruz_barbeiro',
+                           user='postgres',
+                           password='postgres',
+                           host='localhost', port='5432')
 
 class Solicitacao(db.Model):
     __tablename__='solicitacoes'
@@ -46,11 +57,11 @@ class Solicitacao(db.Model):
         self.especialista_classification = especialista_classification
         self.nome_especialista = nome_especialista
 
-    def to_json(self):
-        return {"id": self.id, "nome": self.nome, "email": self.email, "telefone": self.telefone, "endereco": self.endereco, 
-                "dl_classification": self.dl_classification, "img_dir": self.img_dir, 
-                "especialista_classification": self.especialista_classification, "nome_especialista": self.nome_especialista}
-
+class SolicitacaoSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Solicitacao
+        load_instance = True
+    
 @app.route('/')
 @app.route('/home')
 def home():
@@ -82,39 +93,97 @@ def resultado_da_consulta():
     db.session.add(solicitacao)
     db.session.commit()
 
-    return preds
+    solicitacoes = Solicitacao.query.all()
+    solicitacao_schema = SolicitacaoSchema(many=True)
+    output = solicitacao_schema.dump(solicitacoes)
+    # Save the json to ./json
+    data_bytes = jsonify(output).data
+    data_string = data_bytes.decode('utf-8')
+    data_string = data_string.replace('\\', '/')
+    json_data = json.loads(data_string)
 
-# @app.route('/login', methods=['POST', 'GET'])
-# def login():
-#     if request.method == "POST":
-#         usuario = request.form["usuario"]
-#         senha = request.form["senha"]
-#         if usuario == 'admin' and senha == 'senha123':
-#             return redirect(url_for("especialista"))
-#         return redirect(url_for("login"))
-#     else:
-#         return render_template("login.html")
+    basepath = os.path.dirname(__file__)
+    json_dir = os.path.join(
+        basepath, 'json', secure_filename('solicitacoes.json'))
+    
+    with open(json_dir, 'w', encoding='utf-8') as f:
+        json.dump(json_data, f, ensure_ascii=False, indent=4)
+
+        sender_email = "reginaldo.filho@ime.eb.br"
+        #receiver_email = "roger.ferreira@ime.eb.br"
+        receiver_email = "reginaldo.filho@ime.eb.br"
+        message = MIMEMultipart("alternative")
+        message["Subject"] = "Teste com HTML e Imagem"
+        message["From"] = sender_email
+        message["To"] = receiver_email
+
+        # write the text/plain part
+        text = """"""
+
+        # write the HTML part
+        html = f"""\
+        <html>
+            <body>
+                <p>{nome}</p><br>
+                <p>{email}</p><br>
+                <p>{endereco}</p><br>
+                <p>{telefone}</p><br>
+                <p>{preds}</p><br>
+            </body>
+        </html>
+        """
+
+        fp = open(img_dir, 'rb')
+        image = MIMEImage(fp.read())
+        fp.close()
+
+        # convert both parts to MIMEText objects and add them to the MIMEMultipart message
+        text = MIMEText(html, "html")
+        message.attach(text)
+        message.attach(image)
+
+        servidor_email.sendmail(sender_email, receiver_email, message.as_string())
+
+        print('Sent')
+
+    return preds
 
 @app.route('/especialista')
 def especialista():
+    basepath = os.path.dirname(__file__)
+    json_dir = os.path.join(
+        basepath, 'json', secure_filename('solicitacoes.json'))
+
+    with open(json_dir, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    # Inicializar listas para armazenar os valores
+    list_dl_classification = []
+    list_email = []
+    list_endereco = []
+    list_especialista_classification = []
+    list_id = []
+    list_img_dir = []
+    list_nome = []
+    list_nome_especialista = []
+    list_telefone = []
+
+    # Percorrer a lista de dicionários e extrair os valores
+    for item in data:
+        list_dl_classification.append(item['dl_classification'])
+        list_email.append(item['email'])
+        list_endereco.append(item['endereco'])
+        list_especialista_classification.append(item['especialista_classification'])
+        list_id.append(item['id'])
+        list_img_dir.append(item['img_dir'])
+        list_nome.append(item['nome'])
+        list_nome_especialista.append(item['nome_especialista'])
+        list_telefone.append(item['telefone'])
+
+    mapa(list_nome,list_email,list_telefone,list_endereco,list_dl_classification,
+        list_especialista_classification,list_nome_especialista,list_img_dir)
+
     return render_template('especialista.html')
-
-@app.route('/atualiza_banco', methods=['POST'])
-def atualiza_banco():
-    id_solicitacao = request.form.get('id')
-    real_classification = request.form.get('reposta_especialista')
-    nome_especialista = request.form.get('nome_especialista')
-
-    db.session.execute(text("update solicitacoes set nome_especialista=:resposta where id=:id"), {"resposta":nome_especialista, "id": id_solicitacao})
-
-    if real_classification == 'Sim':
-        db.session.execute(text("update solicitacoes set especialista_classification=:resposta where id=:id"), {"resposta":True, "id": id_solicitacao})
-    elif real_classification == 'Não':
-        db.session.execute(text("update solicitacoes set especialista_classification=:resposta where id=:id"), {"resposta":False, "id": id_solicitacao})
-
-    db.session.commit()
-
-    return 'Banco atualizado!' 
 
         # db_cursor = conexao.cursor()
 

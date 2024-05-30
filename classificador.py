@@ -21,7 +21,7 @@ def prediction_func(img_path):
     if output[1] < 55.0:
         nivel_certeza = 'BAIXA'
     elif (output[1] >= 55.0 and output[1] < 70.0):
-        nivel_certeza = 'MÉDIA'
+        nivel_certeza = 'MEDIA'
     elif (output[1] >= 70.0 and output[1] < 85.0):
         nivel_certeza = 'MODERADA'
     elif (output[1] >= 85.0 and output[1] < 95.0):
