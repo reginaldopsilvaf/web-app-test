@@ -14,12 +14,11 @@ from geopy.geocoders import Nominatim
 # Import biblioteca for automatic e-mail
 import smtplib
 servidor_email = smtplib.SMTP('smtp.gmail.com', 587)
-#servidor_email = smtplib.SMTP('smtp.gmail.com')
 servidor_email.starttls()
 servidor_email.ehlo()
-servidor_email.login('reginaldo.filho@ime.eb.br', 'zztt cvks hkhu zsow')
-login = 'reginaldo.filho@ime.eb.br'
-password = 'zztt cvks hkhu zsow'
+servidor_email.login('necessita-ser-preechido-com-gmail', 'necessita-ser-preechido-com-senha')
+login = 'necessita-ser-preechido-com-gmail'
+password = 'necessita-ser-preechido-com-senha'
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
@@ -28,11 +27,12 @@ app.config['SECRET_KEY'] = "palavra-secreta"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost/fiocruz_barbeiro'
 app.config['SQLALCHEMY_TRACKMODIFICATIONS'] = False
 
+# Create and connect to postgreSQL database
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-conexao = psycopg2.connect(database='fiocruz_barbeiro',
-                           user='postgres',
-                           password='postgres',
+conexao = psycopg2.connect(database='banco_de_dados',
+                           user='usuario',
+                           password='senha',
                            host='localhost', port='5432')
 
 class Solicitacao(db.Model):
@@ -136,9 +136,8 @@ def resultado_da_consulta():
     with open(json_dir, 'w', encoding='utf-8') as f:
         json.dump(json_data, f, ensure_ascii=False, indent=4)
 
-        sender_email = "reginaldo.filho@ime.eb.br"
-        #receiver_email = "roger.ferreira@ime.eb.br"
-        receiver_email = "reginaldo.filho@ime.eb.br"
+        sender_email = "gmail-que-envia"
+        receiver_email = "email-que-recebe"
         message = MIMEMultipart("alternative")
         message["Subject"] = "Teste com HTML e Imagem"
         message["From"] = sender_email
@@ -221,25 +220,3 @@ def especialista():
          list_latitude,list_longitude,list_dl_classification,list_especialista_classification,list_nome_especialista,list_img_dir)
 
     return render_template('especialista.html')
-
-        # db_cursor = conexao.cursor()
-
-        # if real_classification == 'Sim':
-        #     db_cursor.execute( 
-        #         '''UPDATE solicitacoes SET nome_especialista=%s,\ 
-        #         dl_classification=%s WHERE id=%s''', (nome_especialista, True, id_solicitacao))
-        # elif real_classification == 'Não':
-        #     db_cursor.execute( 
-        #         '''UPDATE solicitacoes SET nome_especialista=%s,\ 
-        #         dl_classification=%s WHERE id=%s''', (nome_especialista, False, id_solicitacao))
-        
-
-        # nome = list(('joao', 'ana'))
-        # email = list(('asdsad@fasd.com', 'asdasf@grsf.com'))
-        # telefone = list(('2132312321', '4123231123'))
-        # endereco = list(('rua lauro muller, 36', 'rua dias cabral, 82'))
-        # nivel_certeza = list(('ALTA', 'BAIXA'))
-        # real_classification = list((True, ''))
-        # nome_especialista = list(('pedro', ''))
-        # img_dir = list(('D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta.jpg', 
-        #                 'D:/fiocruz/aplicacao_web/app/uploads/exemplo_consulta2.jpg'))
