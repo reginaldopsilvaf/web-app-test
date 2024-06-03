@@ -9,6 +9,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow 
 import json
+from geopy.geocoders import Nominatim
 
 # Import biblioteca for automatic e-mail
 import smtplib
@@ -38,21 +39,32 @@ class Solicitacao(db.Model):
     __tablename__='solicitacoes'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    nome = db.Column(db.String(50))
-    email = db.Column(db.String(100))
+    nome = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
     telefone = db.Column(db.String(20))
-    endereco = db.Column(db.String(100))
+    logradouro = db.Column(db.String(100), nullable=False)
+    numero = db.Column(db.String(10), nullable=False)
+    municipio = db.Column(db.String(50), nullable=False)
+    estado = db.Column(db.String(50), nullable=False)
+    latitude = db.Column(db.Numeric(precision=10, scale=5))
+    longitude = db.Column(db.Numeric(precision=10, scale=5))
     dl_classification = db.Column(db.String(10))
     especialista_classification = db.Column(db.Boolean)
     nome_especialista = db.Column(db.String(50))
     img_dir = db.Column(db.String(100))
 
-    def __init__(self, nome, email, telefone, endereco, 
-                 dl_classification, img_dir, especialista_classification=None, nome_especialista=None):
+    def __init__(self, nome, email, telefone, logradouro, numero, municipio, estado, 
+                 dl_classification, img_dir, especialista_classification=None, 
+                 nome_especialista=None, latitude=None, longitude=None):
         self.nome = nome
         self.email = email
         self.telefone = telefone
-        self.endereco = endereco
+        self.logradouro = logradouro
+        self.numero = numero
+        self.municipio = municipio
+        self.estado = estado
+        self.latitude = latitude
+        self.longitude = longitude
         self.dl_classification = dl_classification
         self.img_dir = img_dir
         self.especialista_classification = especialista_classification
@@ -76,7 +88,10 @@ def envio_de_foto():
 def resultado_da_consulta():
     nome = request.form.get('nome')
     email = request.form.get('email')
-    endereco = request.form.get('endereco')
+    logradouro = request.form.get('logradouro')
+    numero = request.form.get('numero')
+    municipio = request.form.get('municipio')
+    estado = request.form.get('estado')
     telefone = request.form.get('telefone')
     img = request.files['file']
 
@@ -90,7 +105,18 @@ def resultado_da_consulta():
     preds = prediction_func(img_dir)
     dl_classification = preds.split('\n')[0]
 
-    solicitacao = Solicitacao(nome, email, telefone, endereco, dl_classification, img_dir=img_dir)
+    # Calculate lat and long
+    loc = Nominatim(user_agent="GetLoc")
+    try:
+        getLoc = loc.geocode(logradouro+','+numero+','+municipio+','+estado)
+        latitude = getLoc.latitude
+        longitude = getLoc.longitude
+        solicitacao = Solicitacao(nome, email, telefone, logradouro, numero, 
+                                municipio, estado, dl_classification, img_dir=img_dir, 
+                                latitude=latitude, longitude=longitude)
+    except:
+        solicitacao = Solicitacao(nome, email, telefone, logradouro, numero, 
+                                municipio, estado, dl_classification, img_dir=img_dir)
     db.session.add(solicitacao)
     db.session.commit()
 
@@ -125,11 +151,11 @@ def resultado_da_consulta():
         html = f"""\
         <html>
             <body>
-                <p>{nome}</p><br>
-                <p>{email}</p><br>
-                <p>{endereco}</p><br>
-                <p>{telefone}</p><br>
-                <p>{preds}</p><br>
+                <p>Nome: {nome}</p><br>
+                <p>Email: {email}</p><br>
+                <p>Endereço: {logradouro+','+numero+','+municipio+','+estado}</p><br>
+                <p>Telefone: {telefone}</p><br>
+                <p>Classificação por IA: {preds}</p><br>
             </body>
         </html>
         """
@@ -161,7 +187,12 @@ def especialista():
     # Inicializar listas para armazenar os valores
     list_dl_classification = []
     list_email = []
-    list_endereco = []
+    list_logradouro = []
+    list_numero = []
+    list_municipio = []
+    list_estado = []
+    list_latitude = []
+    list_longitude = []
     list_especialista_classification = []
     list_id = []
     list_img_dir = []
@@ -173,7 +204,12 @@ def especialista():
     for item in data:
         list_dl_classification.append(item['dl_classification'])
         list_email.append(item['email'])
-        list_endereco.append(item['endereco'])
+        list_logradouro.append(item['logradouro'])
+        list_numero.append(item['numero'])
+        list_municipio.append(item['municipio'])
+        list_estado.append(item['estado'])
+        list_latitude.append(item['latitude'])
+        list_longitude.append(item['longitude'])
         list_especialista_classification.append(item['especialista_classification'])
         list_id.append(item['id'])
         list_img_dir.append(item['img_dir'])
@@ -181,8 +217,8 @@ def especialista():
         list_nome_especialista.append(item['nome_especialista'])
         list_telefone.append(item['telefone'])
 
-    mapa(list_nome,list_email,list_telefone,list_endereco,list_dl_classification,
-        list_especialista_classification,list_nome_especialista,list_img_dir)
+    mapa(list_nome,list_email,list_telefone,list_logradouro,list_numero,list_municipio,list_estado,
+         list_latitude,list_longitude,list_dl_classification,list_especialista_classification,list_nome_especialista,list_img_dir)
 
     return render_template('especialista.html')
 
