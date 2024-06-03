@@ -63,7 +63,7 @@ $(document).ready(function () {
         // Compute answer from specialist by calling api /autenticar
         $.ajax({
             type: 'POST',
-            url: '/autenticar',
+            url: '/atualiza_banco',
             data: form_data2,
             contentType: false,
             cache: false,

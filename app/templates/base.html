@@ -5,21 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Identificador de barbeiro - Fiocruz</title>
+    <title class="send-image">Identificador de barbeiro - Fiocruz</title>
     <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">      
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/estilo.css') }}" rel="stylesheet">       
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-default custom">
         <div class="container">
-            <a href="/home">Home</a>
-            <a href="/envio_de_foto">Envie uma foto</a>
-            <a href="/login">Acesso do especialista</a>
-            <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Ajuda</button>
+            <a class="indices-barra" href="/home">Início</a>
+            <a class="indices-barra" href="/envio_de_foto">Envie uma foto</a>
+            <a class="indices-barra" href="/especialista">Acesso do especialista</a>
         </div>
     </nav>
     <div class="container">

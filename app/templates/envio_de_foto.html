@@ -2,20 +2,26 @@
 
     {% block conteudo %}
 
-<h2>Envie uma foto do inseto!</h2>
+<h2 class="send-image">Envie uma foto do inseto!</h2>
 
 <div>
     <form id="upload-file" action="/resultado_da_consulta" method="post">
-        <label for="nome">Seu nome (obrigatório)</label><br>
-        <input type="text" name="nome"><br><br>
-        <label for="email">Seu e-mail (obrigatório)</label><br>
-        <input type="email" name="email"><br><br>
-        <label for="endereco">Seu endereço (obrigatório)</label><br>
-        <input type="text" name="endereco"><br><br>
-        <label for="telefone">Seu telefone</label><br>
-        <input type="tel" name="telefone"><br><br>
+        <label for="nome" class="text-form">Seu nome (obrigatório)</label><br>
+        <input type="text" name="nome" class="input-form"><br><br>
+        <label for="email" class="text-form">Seu e-mail (obrigatório)</label><br>
+        <input type="email" name="email" class="input-form"><br><br>
+        <label for="logradouro" class="text-form">Seu logradouro (obrigatório)</label><br>
+        <input type="text" name="logradouro" class="input-form"><br><br>
+        <label for="numero" class="text-form">Nº do endereço (obrigatório)</label><br>
+        <input type="text" name="numero" class="input-form"><br><br>
+        <label for="municipio" class="text-form">Seu Município (obrigatório)</label><br>
+        <input type="text" name="municipio" class="input-form"><br><br>
+        <label for="estado" class="text-form">Seu Estado (obrigatório)</label><br>
+        <input type="text" name="estado" class="input-form"><br><br>
+        <label for="telefone" class="text-form">Seu telefone</label><br>
+        <input type="tel" name="telefone" class="input-form"><br><br>
         <label for="imageUpload" class="upload-label">
-            Escolher ficheiro
+            Escolher imagem
         </label>
         <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
     </form>
@@ -26,7 +32,7 @@
             </div>
         </div>
         <div>
-            <button type="submit" class="btn btn-primary btn-lg " id="btn-predict">Enviar</button>
+            <button type="submit" class="btn btn-primary btn-lg" id="btn-predict">Enviar</button>
         </div>
     </div>
 

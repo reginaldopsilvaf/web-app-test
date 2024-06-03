@@ -1,0 +1,50 @@
+[
+    {
+        "dl_classification": "BAIXA",
+        "email": "pedro@gmail.com",
+        "especialista_classification": null,
+        "estado": "RJ",
+        "id": 125,
+        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//triatomineo31.png",
+        "latitude": "-22.95482",
+        "logradouro": "rua lauro muller",
+        "longitude": "-43.17396",
+        "municipio": "Rio de Janeiro",
+        "nome": "Pedro",
+        "nome_especialista": null,
+        "numero": "96",
+        "telefone": "2198765123"
+    },
+    {
+        "dl_classification": "BAIXA",
+        "email": "joao@gmail.com",
+        "especialista_classification": null,
+        "estado": "RJ",
+        "id": 126,
+        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//triatomineo23.png",
+        "latitude": "-22.95638",
+        "logradouro": "rua lauro muller",
+        "longitude": "-43.17570",
+        "municipio": "Rio de Janeiro",
+        "nome": "Joao",
+        "nome_especialista": null,
+        "numero": "16",
+        "telefone": "2198765321"
+    },
+    {
+        "dl_classification": "BAIXA",
+        "email": "gabriel@gmail.com",
+        "especialista_classification": null,
+        "estado": "RJ",
+        "id": 127,
+        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//triatomineo51.png",
+        "latitude": "-22.95126",
+        "logradouro": "rua bartolomeu portela",
+        "longitude": "-43.17622",
+        "municipio": "Rio de Janeiro",
+        "nome": "Gabriel",
+        "nome_especialista": null,
+        "numero": "25",
+        "telefone": "2198765320"
+    }
+]
