@@ -4,8 +4,15 @@
 
     <h2>Projeto Identificador de barbeiro - Fiocruz</h2>
     <p>
-        <img class="imgquadrada" src="{{ url_for('static', filename='imagens/envie-uma-foto.jpg') }}" width=200px>
-        <br>Informações e instruções sobre o projeto de identificador de barbeiros por foto de celular
+        <dl>
+        <dt>Informações e instruções sobre o projeto de identificador de barbeiros por foto de celular</dt>
+        <dd>Imagem nítida</dd>
+        <dd>Barbeiro focalizado</dd>
+        <dd>Imagem recortada com o barbeiro no centro</dd>
+        </dl>
     </p>
+
+    <h4>Segue abaixo uma imagem exemplo:</h4>
+    <img class="img-exemplo" src="{{ url_for('static', filename='imagens/triatomineo_159.png') }}" width=200px>
 
     {% endblock %}

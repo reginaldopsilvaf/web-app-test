@@ -36,16 +36,18 @@ input[type="file"] {
 .upload-label{
     display: inline-block;
     padding: 12px 30px;
-    background: #39D2B4;
+    background: rgb(0, 113, 234);
     color: #fff;
     font-size: 1em;
     transition: all .4s;
     cursor: pointer;
+    font-family: Poppins-regular;
+    border-radius: 3.2px;
 }
 
 .upload-label:hover{
     background: #34495E;
-    color: #39D2B4;
+    color: rgb(0, 113, 234);
 }
 
 .loader {
@@ -61,3 +63,39 @@ input[type="file"] {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+.indices-barra {
+    color: white;
+    font-weight: bold;
+}
+
+.navbar.custom {
+    background-color: darkblue;
+    height: 2cm;
+  }
+
+  .send-image {
+    font-family: Poppins-bold;
+    color: rgb(80, 90, 95);
+    font-weight: 500;
+    font-size: 32px;
+    box-sizing: border-box;
+  }
+
+  .text-form {
+    font-family: Poppins-regular;
+    color: rgb(80, 90, 95);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    box-sizing: border-box;
+  }
+
+  .input-form {
+    border-radius: 3.2px;
+    color: rgb(73, 80, 87);
+    font-size: 400;
+    border-color: rgb(198, 210, 222);
+    border-style: solid;
+    background-clip: border-box;
+  }

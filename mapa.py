@@ -27,22 +27,16 @@ def mapa(nome,email,telefone,endereco,nivel_certeza,
                 {endereco}<br>
                 <b>Chance de ser barbeiro:</b><br>
                 {nivel_certeza}<br>
-                <b>Classificação do especialista:</b><br>
-                {real_classification}<br>
-                <b>Nome do especialista:</b><br>
-                {nome_especialista}<br><br>
-                Fotografia:<br>
+                <br>
                 <img src="data:image/jpeg;base64,{encoded}" width=200px>'''
 
         iframe = folium.IFrame(html,width=350,height=450)
         popup = folium.Popup(iframe,max_width=450)
-        if real_classification == '':
+        if real_classification == None:
             marker = folium.Marker([lat,long], popup=(popup),
-                                tooltip=f'ID: {id}', 
                                 icon=folium.Icon(icon='exclamation-sign',icon_color='red',color='black')).add_to(map)
         else:
-            marker = folium.Marker([lat,long], popup=(popup),
-                                tooltip=f'ID: {id}', 
+            marker = folium.Marker([lat,long], popup=(popup), 
                                 icon=folium.Icon(icon='ok',icon_color='green',color='black')).add_to(map)
 
         map.add_child(marker)

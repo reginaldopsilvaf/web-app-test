@@ -13,6 +13,7 @@ import json
 # Import biblioteca for automatic e-mail
 import smtplib
 servidor_email = smtplib.SMTP('smtp.gmail.com', 587)
+#servidor_email = smtplib.SMTP('smtp.gmail.com')
 servidor_email.starttls()
 servidor_email.ehlo()
 servidor_email.login('reginaldo.filho@ime.eb.br', 'zztt cvks hkhu zsow')

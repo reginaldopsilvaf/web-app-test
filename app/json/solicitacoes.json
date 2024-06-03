@@ -1,68 +1,13 @@
 [
     {
         "dl_classification": "ALTISSIMA",
-        "email": "marcos@mail.com",
-        "endereco": "Rua dos Jatobas, 664",
+        "email": "exemplo1@gmail.com",
+        "endereco": "rua lauro muller, 56, botafogo",
         "especialista_classification": null,
-        "id": 88,
-        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//3.JPG",
-        "nome": "marcos",
+        "id": 111,
+        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//Copia_de_Panstrogylus_geniculatus.png",
+        "nome": "exemplo1",
         "nome_especialista": null,
-        "telefone": "219887651321"
-    },
-    {
-        "dl_classification": "ALTISSIMA",
-        "email": "joao@mail.com",
-        "endereco": "rua lauro muller, 56, rio de janeiro",
-        "especialista_classification": null,
-        "id": 89,
-        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//1.JPG",
-        "nome": "joao",
-        "nome_especialista": null,
-        "telefone": "219887651123"
-    },
-    {
-        "dl_classification": "ALTISSIMA",
-        "email": "ana@mail.com",
-        "endereco": "rua lauro muller, 36",
-        "especialista_classification": null,
-        "id": 90,
-        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//9.JPG",
-        "nome": "ana",
-        "nome_especialista": null,
-        "telefone": "829887651123"
-    },
-    {
-        "dl_classification": "BAIXA",
-        "email": "yago@mail.com",
-        "endereco": "rua lauro muller, 96, rio de janeiro",
-        "especialista_classification": null,
-        "id": 91,
-        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//00000011.jpg",
-        "nome": "yago",
-        "nome_especialista": null,
-        "telefone": "829887651098"
-    },
-    {
-        "dl_classification": "ALTISSIMA",
-        "email": "regis@mail.com",
-        "endereco": "rua lauro muller, 76, rio de janeiro",
-        "especialista_classification": null,
-        "id": 92,
-        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//00000014.jpg",
-        "nome": "regis",
-        "nome_especialista": null,
-        "telefone": "829887651543"
-    },
-    {
-        "dl_classification": "ALTISSIMA",
-        "email": "regis@mail.com",
-        "endereco": "rua lauro muller, 76, rio de janeiro",
-        "especialista_classification": null,
-        "id": 93,
-        "img_dir": "D://fiocruz//aplicacao_web//app//uploads//00000025.jpg",
-        "nome": "regis",
-        "nome_especialista": null,
-        "telefone": "829887651543"
+        "telefone": "21989898989"
     }
 ]
