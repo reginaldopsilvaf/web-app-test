@@ -141,7 +141,7 @@ def resultado_da_consulta():
         message = MIMEMultipart("alternative")
         message["Subject"] = "Teste com HTML e Imagem"
         message["From"] = sender_email
-        message["To"] = receiver_email
+        message["To"] = email
 
         # write the text/plain part
         text = """"""
