@@ -16,15 +16,16 @@ import smtplib
 servidor_email = smtplib.SMTP('smtp.gmail.com', 587)
 servidor_email.starttls()
 servidor_email.ehlo()
-servidor_email.login('necessita-ser-preechido-com-gmail', 'necessita-ser-preechido-com-senha')
 login = 'necessita-ser-preechido-com-gmail'
 password = 'necessita-ser-preechido-com-senha'
+servidor_email.login(login, password)
+
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
 app.config['SECRET_KEY'] = "palavra-secreta"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost/fiocruz_barbeiro'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost/nome_banco_de_dados'
 app.config['SQLALCHEMY_TRACKMODIFICATIONS'] = False
 
 # Create and connect to postgreSQL database
@@ -136,8 +137,8 @@ def resultado_da_consulta():
     with open(json_dir, 'w', encoding='utf-8') as f:
         json.dump(json_data, f, ensure_ascii=False, indent=4)
 
-        sender_email = "gmail-que-envia"
-        receiver_email = "email-que-recebe"
+        sender_email = 'email-que-envia'
+        receiver_email = "email"
         message = MIMEMultipart("alternative")
         message["Subject"] = "Teste com HTML e Imagem"
         message["From"] = sender_email
