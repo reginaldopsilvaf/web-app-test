@@ -44,6 +44,6 @@ def mapa(nome,email,telefone,logradouro,numero,municipio,estado,
 
     basepath = os.path.dirname(__file__)
     html_dir = os.path.join(
-        basepath, 'app\\templates', secure_filename('especialista.html'))
+        basepath, 'app/templates', secure_filename('especialista.html'))
     map.save(html_dir)
     #map.save('D:/fiocruz/aplicacao_web/app/templates/especialista.html')
